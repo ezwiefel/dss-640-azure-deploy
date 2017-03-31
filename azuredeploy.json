@@ -112,10 +112,8 @@
                         "settings": {
                         "fileUris": [
                             "https://gist.githubusercontent.com/ezwiefel/47bd9cad123f23678d00febdc2f53632/raw/4099727ff64b20ee0f50b5ee092ddcb6e9934f4c/az_oracle_start_script.sh"
-                        ]              
-                        },
-                        "protectedSettings": {
-                        "commandToExecute": "[concat('runuser -l oracle -c ', variables('singleQuote'), 'sh az_oracle_start_script.sh ', parameters('adminPassword'), ' ', parameters('dbUsername'), ' ', parameters('dbPassword'), variables('singleQuote'))]"
+                        ],
+                        "commandToExecute": "[concat('runuser -l oracle -c ', variables('singleQuote'), 'sh az_oracle_start_script.sh ', parameters('adminPassword'), ' ', parameters('dbUsername'), ' ', parameters('dbPassword'), variables('singleQuote'))]"              
                         }
                     }
                 }
