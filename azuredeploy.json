@@ -41,7 +41,7 @@
         "addressPrefix": "10.2.0.0/24",
         "subnetName": "default",
         "subnetPrefix": "10.2.0.0/24",
-        "publicIpAddressName": "[[concat('ip', uniqueString(concat(parameters('virtualMachineName'), resourceGroup().id)))]",
+        "publicIpAddressName": "[concat('ip', uniqueString(concat(parameters('virtualMachineName'), resourceGroup().id)))]",
         "publicIpAddressType": "Static",
         "location": "[resourceGroup().location]",
         "adminUsername": "oracle"
