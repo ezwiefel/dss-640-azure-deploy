@@ -115,7 +115,7 @@
                         ]              
                         },
                         "protectedSettings": {
-                        "commandToExecute": "[concat('runuser -l oracle -c ', variables('singleQuote'), './az_oracle_start_script.sh ', parameters('adminPassword'), ' ', parameters('dbUsername'), ' ', parameters('dbPassword'), variables('singleQuote'))]"
+                        "commandToExecute": "[concat('runuser -l oracle -c ', variables('singleQuote'), 'sh az_oracle_start_script.sh ', parameters('adminPassword'), ' ', parameters('dbUsername'), ' ', parameters('dbPassword'), variables('singleQuote'))]"
                         }
                     }
                 }
