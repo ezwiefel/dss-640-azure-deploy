@@ -98,7 +98,7 @@
                     "location": "[resourceGroup().location]",
                     "apiVersion": "2015-06-15",
                     "dependsOn": [
-                        "[concat('Microsoft.Compute/virtualMachines/', concat(parameters('virtualMachineName'),copyindex()))]"
+                        "[concat('Microsoft.Compute/virtualMachines/', parameters('virtualMachineName'))]"
                     ],
                     "tags": {
                         "displayName": "start-up-script"
