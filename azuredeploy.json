@@ -89,7 +89,36 @@
                         }
                     ]
                 }
-            }
+            },
+            "resources": [
+                // Oracle Install Script
+                {
+                    "name": "oracle-startup-script",
+                    "type": "extensions",
+                    "location": "[resourceGroup().location]",
+                    "apiVersion": "2015-06-15",
+                    "dependsOn": [
+                        "[concat('Microsoft.Compute/virtualMachines/', concat(parameters('virtualMachineName'),copyindex()))]"
+                    ],
+                    "tags": {
+                        "displayName": "start-up-script"
+                    },
+                    "properties": {
+                        "publisher": "Microsoft.Azure.Extensions",
+                        "type": "CustomScript",
+                        "typeHandlerVersion": "2.0",
+                        "autoUpgradeMinorVersion": true,
+                        "settings": {
+                        "fileUris": [
+                            "https://gist.githubusercontent.com/ezwiefel/47bd9cad123f23678d00febdc2f53632/raw/4099727ff64b20ee0f50b5ee092ddcb6e9934f4c/az_oracle_start_script.sh"
+                        ]              
+                        },
+                        "protectedSettings": {
+                        "commandToExecute": "sh azure_oracle_start_script.sh [parameters('adminPassword')] [parameters('dbUsername')] [parameters('dbPassword')]"
+                        }
+                    }
+                }
+            ]
         },
         // Storage Account 
         {
@@ -222,33 +251,6 @@
                },
                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines',parameters('virtualMachineName'))]"
            }
-        },
-        // Oracle Install Script
-        {
-            "name": "oracle-startup-script",
-            "type": "extensions",
-            "location": "[resourceGroup().location]",
-            "apiVersion": "2015-06-15",
-            "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/', parameters('virtualMachineName'))]"
-            ],
-            "tags": {
-                "displayName": "start-up-script"
-            },
-            "properties": {
-                "publisher": "Microsoft.Azure.Extensions",
-                "type": "CustomScript",
-                "typeHandlerVersion": "2.0",
-                "autoUpgradeMinorVersion": true,
-                "settings": {
-                "fileUris": [
-                    "https://gist.githubusercontent.com/ezwiefel/47bd9cad123f23678d00febdc2f53632/raw/4099727ff64b20ee0f50b5ee092ddcb6e9934f4c/az_oracle_start_script.sh"
-                ]              
-                },
-                "protectedSettings": {
-                "commandToExecute": "sh azure_oracle_start_script.sh [parameters('adminPassword')] [parameters('dbUsername')] [parameters('dbPassword')]"
-                }
-            }
         }
     ],
     "outputs": {
