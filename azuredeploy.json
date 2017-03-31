@@ -44,7 +44,8 @@
         "publicIpAddressName": "[concat('ip', uniqueString(concat(parameters('virtualMachineName'), resourceGroup().id)))]",
         "publicIpAddressType": "Static",
         "location": "[resourceGroup().location]",
-        "adminUsername": "oracle"
+        "adminUsername": "oracle",
+        "singleQuote": "'"
     },
     "resources": [
         // Oracle Virtual Machine 
@@ -114,7 +115,7 @@
                         ]              
                         },
                         "protectedSettings": {
-                        "commandToExecute": "sh azure_oracle_start_script.sh [parameters('adminPassword')] [parameters('dbUsername')] [parameters('dbPassword')]"
+                        "commandToExecute": "[concat('runuser -l oracle -c ', variables('singleQuote'), './az_oracle_start_script.sh ', parameters('adminPassword'), ' ', parameters('dbUsername'), ' ', parameters('dbPassword'), variables('singleQuote'))]"
                         }
                     }
                 }
