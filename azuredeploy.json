@@ -233,7 +233,7 @@
         // Oracle Auto-Shutdown
         {
            "type": "Microsoft.DevTestLab/schedules",
-           "name": "shutdown-computevm-oraclevm",
+           "name": "[concat('shutdown-computevm-', parameters('virtualMachineName'))]",
            "apiVersion": "2016-05-15",
            "location": "[resourceGroup().location]",
            "dependsOn": [
