@@ -45,10 +45,11 @@
         "publicIpAddressType": "Static",
         "location": "[resourceGroup().location]",
         "adminUsername": "oracle",
-        "singleQuote": "'"
+        "singleQuote": "'",
+        "scriptCommand": "[concat('cp az_oracle_start_script.sh /etc/start_script.sh && chmod 755 /etc/start_script.sh && su -l oracle -c ', variables('singleQuote'), '/etc/start_script.sh ', parameters('adminPassword'), ' ', parameters('dbUsername'), ' ', parameters('dbPassword'), variables('singleQuote'))]"
     },
     "resources": [
-        // Oracle Virtual Machine 
+
         {
             "name": "[parameters('virtualMachineName')]",
             "type": "Microsoft.Compute/virtualMachines",
@@ -72,7 +73,7 @@
                         "publisher": "Oracle",
                         "offer": "Oracle-Database-Ee",
                         "sku": "12.1.0.2",
-                        "version": "latest"
+                        "version": "12.1.20170202"
                     },
                     "osDisk": {
                         "name": "[parameters('virtualMachineName')]",
@@ -92,7 +93,7 @@
                 }
             },
             "resources": [
-                // Oracle Install Script
+
                 {
                     "name": "oracle-startup-script",
                     "type": "extensions",
@@ -110,16 +111,18 @@
                         "typeHandlerVersion": "2.0",
                         "autoUpgradeMinorVersion": true,
                         "settings": {
-                        "fileUris": [
-                            "https://gist.githubusercontent.com/ezwiefel/47bd9cad123f23678d00febdc2f53632/raw/4099727ff64b20ee0f50b5ee092ddcb6e9934f4c/az_oracle_start_script.sh"
-                        ],
-                        "commandToExecute": "[concat('runuser -l oracle -c ', variables('singleQuote'), 'sh az_oracle_start_script.sh ', parameters('adminPassword'), ' ', parameters('dbUsername'), ' ', parameters('dbPassword'), variables('singleQuote'))]"              
+                            "fileUris": [
+                                "https://gist.githubusercontent.com/ezwiefel/47bd9cad123f23678d00febdc2f53632/raw/4099727ff64b20ee0f50b5ee092ddcb6e9934f4c/az_oracle_start_script.sh"
+                            ]              
+                        },
+                        "protectedSettings": {
+                            "commandToExecute": "[variables('scriptCommand')]"
                         }
                     }
                 }
             ]
         },
-        // Storage Account 
+
         {
             "name": "[variables('storageAccountName')]",
             "type": "Microsoft.Storage/storageAccounts",
@@ -129,7 +132,7 @@
                 "accountType": "[variables('storageAccountType')]"
             }
         },
-        // Virtual Network 
+
         {
             "name": "[variables('virtualNetworkName')]",
             "type": "Microsoft.Network/virtualNetworks",
@@ -151,7 +154,7 @@
                 ]
             }
         },
-        // Oracle NIC 
+
         {
             "name": "[variables('networkInterfaceName')]",
             "type": "Microsoft.Network/networkInterfaces",
@@ -182,7 +185,7 @@
                 }
             }
         },
-        // Oracle Public IP
+
         {
             "name": "[variables('publicIpAddressName')]",
             "type": "Microsoft.Network/publicIpAddresses",
@@ -192,7 +195,7 @@
                 "publicIpAllocationMethod": "[variables('publicIpAddressType')]"
             }
         },
-        // Oracle Network Security Group
+
         {
             "name": "[variables('networkSecurityGroupName')]",
             "type": "Microsoft.Network/networkSecurityGroups",
@@ -229,7 +232,7 @@
                 ]
             }
         },
-        // Oracle Auto-Shutdown
+
         {
            "type": "Microsoft.DevTestLab/schedules",
            "name": "[concat('shutdown-computevm-', parameters('virtualMachineName'))]",
