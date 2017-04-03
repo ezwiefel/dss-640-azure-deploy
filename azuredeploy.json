@@ -112,7 +112,7 @@
                         "autoUpgradeMinorVersion": true,
                         "settings": {
                             "fileUris": [
-                                "https://gist.githubusercontent.com/ezwiefel/47bd9cad123f23678d00febdc2f53632/raw/4099727ff64b20ee0f50b5ee092ddcb6e9934f4c/az_oracle_start_script.sh"
+                                "https://raw.githubusercontent.com/ezwiefel/dss-640-azure-deploy/master/scripts/create_db.sh"
                             ]              
                         },
                         "protectedSettings": {
