@@ -46,7 +46,7 @@
         "location": "[resourceGroup().location]",
         "adminUsername": "oracle",
         "singleQuote": "'",
-        "scriptCommand": "[concat('cp az_oracle_start_script.sh /etc/start_script.sh && chmod 755 /etc/start_script.sh && su -l oracle -c ', variables('singleQuote'), '/etc/start_script.sh ', parameters('adminPassword'), ' ', parameters('dbUsername'), ' ', parameters('dbPassword'), variables('singleQuote'))]"
+        "scriptCommand": "[concat('cp create_db.sh /etc/create_db.sh && chmod 755 /etc/create_db.sh && su -l oracle -c ', variables('singleQuote'), '/etc/create_db.sh ', parameters('adminPassword'), ' ', parameters('dbUsername'), ' ', parameters('dbPassword'), variables('singleQuote'))]"
     },
     "resources": [
 
