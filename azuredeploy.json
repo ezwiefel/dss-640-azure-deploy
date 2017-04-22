@@ -435,11 +435,11 @@
     ],
 "outputs": {
     "hdp-ip-address": {
-        "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',variables('hdpPublicIPAddressName')), '2016-07-01').ipAddress]",
+        "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',variables('hdpPublicIPAddressName')), '2016-09-01').ipAddress]",
         "type": "string"
     },
     "oracle-ip-address": {
-        "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',variables('oraclePublicIPAddressName')), '2016-07-01').ipAddress]",
+        "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',variables('oraclePublicIPAddressName')), '2016-09-01').ipAddress]",
         "type": "string"
     }
 }
