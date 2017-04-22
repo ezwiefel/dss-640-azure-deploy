@@ -434,16 +434,8 @@
         }
     ],
 "outputs": {
-    "hdp-fqdn": {
-        "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',variables('hdpPublicIPAddressName')), '2016-07-01').dnsSettings.fqdn]",
-        "type": "string"
-    },
     "hdp-ip-address": {
         "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',variables('hdpPublicIPAddressName')), '2016-07-01').ipAddress]",
-        "type": "string"
-    },
-    "oracle-fqdn": {
-        "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',variables('oraclePublicIPAddressName')), '2016-07-01').dnsSettings.fqdn]",
         "type": "string"
     },
     "oracle-ip-address": {
