@@ -2,50 +2,30 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "oracleVirtualMachineName": {
+        "HortonworksSandboxAdminUsername": {
             "type": "string",
             "minLength": 1,
             "metadata": {
-                "description": "Name of the Oracle DB Virtual Machine"
+                "description": "Admin username to log into Hortonworks Sandbox virtual machine"
             }
-        },        
-        "adminPassword": {
+        },
+        "AdminPasswordForBothVMs": {
             "type": "securestring",
             "metadata": {
-                "description": "Password to log into Oracle virtual machine"
+                "description": "Admin Password for both Hortonworks and Oracle"
             }
         },
-        "dbUsername": {
+        "OracleDBUsername": {
             "type": "string",
             "minLength": 1,
             "metadata": {
-                "description": "Username to log into Oracle database"
+                "description": "Username to log into Oracle database - not administrator"
             }
         },
-        "dbPassword": {
+        "OracleDBPassword": {
             "type": "securestring",
             "metadata": {
-                "description": "Password to log into Oracle database"
-            }
-        },
-        "hdpVirtualMachineName": {
-            "type": "string",
-            "minLength": 1,
-            "metadata": {
-                "description": "Name of the Hortonworks Sandbox Virtual Machine"
-            }
-        },
-        "hdpAdminUsername": {
-            "type": "string",
-            "minLength": 1,
-            "metadata": {
-                "description": "Username to log into Hortonworks Sandbox virtual machine"
-            }
-        },
-        "hdpAdminPassword": {
-            "type": "securestring",
-            "metadata": {
-                "description": "Password to log into Hortonworks Sandbox virtual machine"
+                "description": "Password to log into Oracle database - not administrator"
             }
         }
     },
@@ -57,21 +37,23 @@
         "subnetName": "default",
         "location": "[resourceGroup().location]",
         
-        "oracleNetworkInterfaceName": "[concat('orcl-nic-', uniqueString(concat(parameters('oracleVirtualMachineName'), resourceGroup().id)))]",
-        "oracleNetworkSecurityGroupName": "[concat('orcl-nsg-', uniqueString(concat(parameters('oracleVirtualMachineName'), resourceGroup().id)))]",
-        "oraclePublicIpAddressName": "[concat('orcl-ip-', uniqueString(concat(parameters('oracleVirtualMachineName'), resourceGroup().id)))]",
+        "oracleVirtualMachineName": "[concat('orcl-vm-', resourceGroup().name)]",
+        "oracleNetworkInterfaceName": "[concat('orcl-nic-', uniqueString(concat(variables('oracleVirtualMachineName'), resourceGroup().id)))]",
+        "oracleNetworkSecurityGroupName": "[concat('orcl-nsg-', uniqueString(concat(variables('oracleVirtualMachineName'), resourceGroup().id)))]",
+        "oraclePublicIpAddressName": "[concat('orcl-ip-', uniqueString(concat(variables('oracleVirtualMachineName'), resourceGroup().id)))]",
         "oracleAdminUsername": "oracle",
 
-        "hdpNetworkInterfaceName": "[concat('hdp-nic-', uniqueString(concat(parameters('hdpVirtualMachineName'), resourceGroup().id)))]",
-        "hdpNetworkSecurityGroupName": "[concat('hdp-nsg-', uniqueString(concat(parameters('hdpVirtualMachineName'), resourceGroup().id)))]",
-        "hdpPublicIpAddressName": "[concat('hdp-ip-', uniqueString(concat(parameters('hdpVirtualMachineName'), resourceGroup().id)))]",
+        "hdpVirtualMachineName": "[concat('hdp-vm-', resourceGroup().name)]",
+        "hdpNetworkInterfaceName": "[concat('hdp-nic-', uniqueString(concat(variables('hdpVirtualMachineName'), resourceGroup().id)))]",
+        "hdpNetworkSecurityGroupName": "[concat('hdp-nsg-', uniqueString(concat(variables('hdpVirtualMachineName'), resourceGroup().id)))]",
+        "hdpPublicIpAddressName": "[concat('hdp-ip-', uniqueString(concat(variables('hdpVirtualMachineName'), resourceGroup().id)))]",
 
         "singleQuote": "'"  
     
     },
     "resources": [
         {
-            "name": "[parameters('oracleVirtualMachineName')]",
+            "name": "[variables('oracleVirtualMachineName')]",
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2016-04-30-preview",
             "location": "[variables('location')]",
@@ -80,9 +62,9 @@
             ],
             "properties": {
                 "osProfile": {
-                    "computerName": "[parameters('oracleVirtualMachineName')]",
+                    "computerName": "[variables('oracleVirtualMachineName')]",
                     "adminUsername": "[variables('oracleAdminUsername')]",
-                    "adminPassword": "[parameters('adminPassword')]"
+                    "adminPassword": "[parameters('AdminPasswordForBothVMs')]"
                 },
                 "hardwareProfile": {
                     "vmSize": "[variables('virtualMachineSize')]"
@@ -118,7 +100,7 @@
                     "location": "[resourceGroup().location]",
                     "apiVersion": "2015-06-15",
                     "dependsOn": [
-                        "[concat('Microsoft.Compute/virtualMachines/', parameters('oracleVirtualMachineName'))]"
+                        "[concat('Microsoft.Compute/virtualMachines/', variables('oracleVirtualMachineName'))]"
                     ],
                     "tags": {
                         "displayName": "start-up-script"
@@ -134,7 +116,7 @@
                             ]              
                         },
                         "protectedSettings": {
-                            "commandToExecute": "[concat('cp create_db.sh /etc/create_db.sh && chmod 755 /etc/create_db.sh && su -l oracle -c ', variables('singleQuote'), '/etc/create_db.sh ', parameters('adminPassword'), ' ', parameters('dbUsername'), ' ', parameters('dbPassword'), variables('singleQuote'))]"
+                            "commandToExecute": "[concat('cp create_db.sh /etc/create_db.sh && chmod 755 /etc/create_db.sh && su -l oracle -c ', variables('singleQuote'), '/etc/create_db.sh ', parameters('AdminPasswordForBothVMs'), ' ', parameters('OracleDBUsername'), ' ', parameters('OracleDBPassword'), variables('singleQuote'))]"
                         }
                     }
                 }
@@ -238,11 +220,11 @@
         },
         {
            "type": "Microsoft.DevTestLab/schedules",
-           "name": "[concat('shutdown-computevm-', parameters('oracleVirtualMachineName'))]",
+           "name": "[concat('shutdown-computevm-', variables('oracleVirtualMachineName'))]",
            "apiVersion": "2016-05-15",
            "location": "[resourceGroup().location]",
            "dependsOn": [
-               "[concat('Microsoft.Compute/virtualMachines/', parameters('oracleVirtualMachineName'))]"
+               "[concat('Microsoft.Compute/virtualMachines/', variables('oracleVirtualMachineName'))]"
            ],
            "properties": {
                "status": "Enabled",
@@ -254,11 +236,11 @@
                "notificationSettings": {
                    "status": "Disabled"
                },
-               "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines',parameters('oracleVirtualMachineName'))]"
+               "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines',variables('oracleVirtualMachineName'))]"
            }
         },
         {
-            "name": "[parameters('hdpVirtualMachineName')]",
+            "name": "[variables('hdpVirtualMachineName')]",
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2016-04-30-preview",
             "location": "[variables('location')]",
@@ -267,9 +249,9 @@
             ],
             "properties": {
                 "osProfile": {
-                    "computerName": "[parameters('hdpVirtualMachineName')]",
-                    "adminUsername": "[parameters('hdpAdminUsername')]",
-                    "adminPassword": "[parameters('hdpAdminPassword')]"
+                    "computerName": "[variables('hdpVirtualMachineName')]",
+                    "adminUsername": "[parameters('HortonworksSandboxAdminUsername')]",
+                    "adminPassword": "[parameters('AdminPasswordForBothVMs')]"
                 },
                 "hardwareProfile": {
                     "vmSize": "[variables('virtualMachineSize')]"
@@ -431,11 +413,11 @@
         },
         {
            "type": "Microsoft.DevTestLab/schedules",
-           "name": "[concat('shutdown-computevm-', parameters('hdpVirtualMachineName'))]",
+           "name": "[concat('shutdown-computevm-', variables('hdpVirtualMachineName'))]",
            "apiVersion": "2016-05-15",
            "location": "[variables('location')]",
            "dependsOn": [
-               "[concat('Microsoft.Compute/virtualMachines/', parameters('hdpVirtualMachineName'))]"
+               "[concat('Microsoft.Compute/virtualMachines/', variables('hdpVirtualMachineName'))]"
            ],
            "properties": {
                "status": "Enabled",
@@ -447,14 +429,26 @@
                "notificationSettings": {
                    "status": "Disabled"
                },
-               "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines',parameters('hdpVirtualMachineName'))]"
+               "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines',variables('hdpVirtualMachineName'))]"
            }
         }
     ],
-    "outputs": {
-        "adminUsername": {
-            "type": "string",
-            "value": "[variables('oracleAdminUsername')]"
-        }
+"outputs": {
+    "hdp-fqdn": {
+        "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',variables('hdpPublicIPAddressName')), '2016-07-01').dnsSettings.fqdn]",
+        "type": "string"
+    },
+    "hdp-ip-address": {
+        "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',variables('hdpPublicIPAddressName')), '2016-07-01').ipAddress]",
+        "type": "string"
+    },
+    "oracle-fqdn": {
+        "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',variables('oraclePublicIPAddressName')), '2016-07-01').dnsSettings.fqdn]",
+        "type": "string"
+    },
+    "oracle-ip-address": {
+        "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',variables('oraclePublicIPAddressName')), '2016-07-01').ipAddress]",
+        "type": "string"
     }
+}
 }
