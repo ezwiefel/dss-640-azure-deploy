@@ -322,13 +322,13 @@
                             },
                             "privateIPAllocationMethod": "Dynamic",
                             "publicIpAddress": {
-                                "id": "[resourceId('sju-test-30','Microsoft.Network/publicIpAddresses', variables('hdpPublicIpAddressName'))]"
+                                "id": "[resourceId('resourceGroup().name','Microsoft.Network/publicIpAddresses', variables('hdpPublicIpAddressName'))]"
                             }
                         }
                     }
                 ],
                 "networkSecurityGroup": {
-                    "id": "[resourceId('sju-test-30', 'Microsoft.Network/networkSecurityGroups', variables('hdpNetworkSecurityGroupName'))]"
+                    "id": "[resourceId('resourceGroup().name', 'Microsoft.Network/networkSecurityGroups', variables('hdpNetworkSecurityGroupName'))]"
                 }
             }
         },
