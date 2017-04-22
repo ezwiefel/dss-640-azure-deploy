@@ -57,14 +57,14 @@
         "subnetName": "default",
         "location": "[resourceGroup().location]",
         
-        "oracleNetworkInterfaceName": "[concat('nic', uniqueString(concat(parameters('oracleVirtualMachineName'), resourceGroup().id)))]",
-        "oracleNetworkSecurityGroupName": "[concat('nsg', uniqueString(concat(parameters('oracleVirtualMachineName'), resourceGroup().id)))]",
-        "oraclePublicIpAddressName": "[concat('ip', uniqueString(concat(parameters('oracleVirtualMachineName'), resourceGroup().id)))]",
+        "oracleNetworkInterfaceName": "[concat('orcl-nic-', uniqueString(concat(parameters('oracleVirtualMachineName'), resourceGroup().id)))]",
+        "oracleNetworkSecurityGroupName": "[concat('orcl-nsg-', uniqueString(concat(parameters('oracleVirtualMachineName'), resourceGroup().id)))]",
+        "oraclePublicIpAddressName": "[concat('orcl-ip-', uniqueString(concat(parameters('oracleVirtualMachineName'), resourceGroup().id)))]",
         "oracleAdminUsername": "oracle",
 
-        "hdpNetworkInterfaceName": "[concat('nic', uniqueString(concat(parameters('hdpVirtualMachineName'), resourceGroup().id)))]",
-        "hdpNetworkSecurityGroupName": "[concat('nsg', uniqueString(concat(parameters('hdpVirtualMachineName'), resourceGroup().id)))]",
-        "hdpPublicIpAddressName": "[concat('ip', uniqueString(concat(parameters('hdpVirtualMachineName'), resourceGroup().id)))]",
+        "hdpNetworkInterfaceName": "[concat('hdp-nic-', uniqueString(concat(parameters('hdpVirtualMachineName'), resourceGroup().id)))]",
+        "hdpNetworkSecurityGroupName": "[concat('hdp-nsg-', uniqueString(concat(parameters('hdpVirtualMachineName'), resourceGroup().id)))]",
+        "hdpPublicIpAddressName": "[concat('hdp-ip-', uniqueString(concat(parameters('hdpVirtualMachineName'), resourceGroup().id)))]",
 
         "singleQuote": "'"  
     
