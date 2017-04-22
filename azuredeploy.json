@@ -2,11 +2,11 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "virtualMachineName": {
+        "oracleVirtualMachineName": {
             "type": "string",
             "minLength": 1,
             "metadata": {
-                "description": "Name of Virtual Machine"
+                "description": "Name of the Oracle DB Virtual Machine"
             }
         },
         "dbUsername": {
@@ -34,14 +34,14 @@
         "subnetRef": "[concat(variables('vnetId'), '/subnets/', variables('subnetName'))]",
         "virtualMachineSize": "Standard_DS3_v2",
         "virtualNetworkName": "[concat('vnet', uniqueString(resourceGroup().id))]",
-        "networkInterfaceName": "[concat('nic', uniqueString(concat(parameters('virtualMachineName'), resourceGroup().id)))]",
-        "networkSecurityGroupName": "[concat('nsg', uniqueString(concat(parameters('virtualMachineName'), resourceGroup().id)))]",
+        "networkInterfaceName": "[concat('nic', uniqueString(concat(parameters('oracleVirtualMachineName'), resourceGroup().id)))]",
+        "networkSecurityGroupName": "[concat('nsg', uniqueString(concat(parameters('oracleVirtualMachineName'), resourceGroup().id)))]",
         "storageAccountName": "[concat('vhdstorage', uniqueString(resourceGroup().id))]",
         "storageAccountType": "Standard_LRS",
         "addressPrefix": "10.2.0.0/24",
         "subnetName": "default",
         "subnetPrefix": "10.2.0.0/24",
-        "publicIpAddressName": "[concat('ip', uniqueString(concat(parameters('virtualMachineName'), resourceGroup().id)))]",
+        "publicIpAddressName": "[concat('ip', uniqueString(concat(parameters('oracleVirtualMachineName'), resourceGroup().id)))]",
         "publicIpAddressType": "Static",
         "location": "[resourceGroup().location]",
         "adminUsername": "oracle",
@@ -51,7 +51,7 @@
     "resources": [
 
         {
-            "name": "[parameters('virtualMachineName')]",
+            "name": "[parameters('oracleVirtualMachineName')]",
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2016-04-30-preview",
             "location": "[variables('location')]",
@@ -61,7 +61,7 @@
             ],
             "properties": {
                 "osProfile": {
-                    "computerName": "[parameters('virtualMachineName')]",
+                    "computerName": "[parameters('oracleVirtualMachineName')]",
                     "adminUsername": "[variables('adminUsername')]",
                     "adminPassword": "[parameters('adminPassword')]"
                 },
@@ -76,10 +76,10 @@
                         "version": "12.1.20170202"
                     },
                     "osDisk": {
-                        "name": "[parameters('virtualMachineName')]",
+                        "name": "[parameters('oracleVirtualMachineName')]",
                         "createOption": "FromImage",
                         "vhd": {
-                            "uri": "[concat(concat(reference(resourceId(resourceGroup().name, 'Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2015-06-15').primaryEndpoints['blob'], 'vhds/'), parameters('virtualMachineName'), '20170329205819.vhd')]"
+                            "uri": "[concat(concat(reference(resourceId(resourceGroup().name, 'Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2015-06-15').primaryEndpoints['blob'], 'vhds/'), parameters('oracleVirtualMachineName'), '20170329205819.vhd')]"
                         }
                     },
                     "dataDisks": []
@@ -100,7 +100,7 @@
                     "location": "[resourceGroup().location]",
                     "apiVersion": "2015-06-15",
                     "dependsOn": [
-                        "[concat('Microsoft.Compute/virtualMachines/', parameters('virtualMachineName'))]"
+                        "[concat('Microsoft.Compute/virtualMachines/', parameters('oracleVirtualMachineName'))]"
                     ],
                     "tags": {
                         "displayName": "start-up-script"
@@ -235,11 +235,11 @@
 
         {
            "type": "Microsoft.DevTestLab/schedules",
-           "name": "[concat('shutdown-computevm-', parameters('virtualMachineName'))]",
+           "name": "[concat('shutdown-computevm-', parameters('oracleVirtualMachineName'))]",
            "apiVersion": "2016-05-15",
            "location": "[resourceGroup().location]",
            "dependsOn": [
-               "[concat('Microsoft.Compute/virtualMachines/', parameters('virtualMachineName'))]"
+               "[concat('Microsoft.Compute/virtualMachines/', parameters('oracleVirtualMachineName'))]"
            ],
            "properties": {
                "status": "Enabled",
@@ -251,7 +251,7 @@
                "notificationSettings": {
                    "status": "Disabled"
                },
-               "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines',parameters('virtualMachineName'))]"
+               "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines',parameters('oracleVirtualMachineName'))]"
            }
         }
     ],
