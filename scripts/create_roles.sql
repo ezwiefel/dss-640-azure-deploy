@@ -1,0 +1,4 @@
+CREATE ROLE warehouse_user IDENTIFIED GLOBALLY;
+
+CREATE USER city_jail IDENTIFIED BY cjpass;
+CREATE USER just_lee IDENTIFIED BY jlpass;
