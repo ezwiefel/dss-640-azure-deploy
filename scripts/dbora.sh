@@ -15,7 +15,7 @@
 # Note: Change the value of ORACLE_HOME to specify the correct Oracle home
 # directory for your installation.
 # ORACLE_HOME=/u01/app/oracle/product/11.1.0/db_1
-ORACLE_HOME=/home/oracle/app/oracle/product/12.1.0/dbhome_1
+ORACLE_HOME=/u01/app/oracle/product/12.1.0/dbhome_1
 
 #
 # Note: Change the value of ORACLE to the login name of the oracle owner
