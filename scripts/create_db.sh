@@ -51,10 +51,10 @@ EOF
 
 
 # Configure auto startup and shutdown of Oracel DB
-sudo wget https://raw.githubusercontent.com/ezwiefel/dss-640-azure-deploy/master/scripts/dbora.sh -O /etc/init.d/dbora <<< $sys_pass
-sudo chmod 750 /etc/init.d/dbora <<< $sys_pass
-sudo chkconfig --add dbora <<< $sys_pass
-sudo chkconfig dbora on <<< $sys_pass 
+echo "$sys_pass" | sudo -S -k wget https://raw.githubusercontent.com/ezwiefel/dss-640-azure-deploy/master/scripts/dbora.sh -O /etc/init.d/dbora
+echo "$sys_pass" | sudo -S -k chmod 750 /etc/init.d/dbora
+echo "$sys_pass" | sudo -S -k chkconfig --add dbora
+echo "$sys_pass" | sudo -S -k chkconfig dbora on 
 
 echo '# /etc/oratab
 orcl:/u01/app/oracle/product/12.1.0/dbhome_1:Y' > /etc/oratab
