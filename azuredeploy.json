@@ -32,7 +32,7 @@
     "variables": {
         "vnetId": "[resourceId(resourceGroup().name,'Microsoft.Network/virtualNetworks', variables('virtualNetworkName'))]",
         "subnetRef": "[concat(variables('vnetId'), '/subnets/', variables('subnetName'))]",
-        "virtualMachineSize": "Standard_DS3_v2",
+        "virtualMachineSize": "Standard_DS2_v2",
         "virtualNetworkName": "[concat('vnet-', uniqueString(resourceGroup().id))]",
         "subnetName": "default",
         "location": "[resourceGroup().location]",
