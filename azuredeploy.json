@@ -179,7 +179,8 @@
             "apiVersion": "2016-09-01",
             "location": "[variables('location')]",
             "properties": {
-                "publicIpAllocationMethod": "Static"
+                "publicIpAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 30
             }
         },
         {
@@ -320,7 +321,8 @@
             "apiVersion": "2016-09-01",
             "location": "[variables('location')]",
             "properties": {
-                "publicIpAllocationMethod": "Static"
+                "publicIpAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 30
             }
         },
         {
