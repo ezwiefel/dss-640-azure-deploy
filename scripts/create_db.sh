@@ -46,7 +46,7 @@ grant create session, create table, create procedure,
       create sequence, create view, create trigger,
       create synonym, create materialized view, query rewrite,
       create any directory, create type, dba, aq_administrator_role, warehouse_user
-to $db_user identified by $db_pass;
+to $db_user identified by "$db_pass";
 EOF
 
 
