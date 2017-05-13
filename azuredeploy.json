@@ -2,30 +2,17 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "HortonworksSandboxAdminUsername": {
+        "Username": {
             "type": "string",
             "minLength": 1,
             "metadata": {
-                "description": "Admin username to log into Hortonworks Sandbox virtual machine"
+                "description": "Username to use with both Hortonworks and Oracle"
             }
         },
-        "AdminPasswordForBothVMs": {
+        "Password": {
             "type": "securestring",
             "metadata": {
-                "description": "Admin Password for both Hortonworks and Oracle"
-            }
-        },
-        "OracleDBUsername": {
-            "type": "string",
-            "minLength": 1,
-            "metadata": {
-                "description": "Username to log into Oracle database - not administrator"
-            }
-        },
-        "OracleDBPassword": {
-            "type": "securestring",
-            "metadata": {
-                "description": "Password to log into Oracle database - not administrator"
+                "description": "Password for both Hortonworks and Oracle"
             }
         }
     },
@@ -64,7 +51,7 @@
                 "osProfile": {
                     "computerName": "[variables('oracleVirtualMachineName')]",
                     "adminUsername": "[variables('oracleAdminUsername')]",
-                    "adminPassword": "[parameters('AdminPasswordForBothVMs')]"
+                    "adminPassword": "[parameters('Password')]"
                 },
                 "hardwareProfile": {
                     "vmSize": "[variables('virtualMachineSize')]"
@@ -116,7 +103,7 @@
                             ]              
                         },
                         "protectedSettings": {
-                            "commandToExecute": "[concat('cp create_db.sh /etc/create_db.sh && chmod 755 /etc/create_db.sh && su -l oracle -c ', variables('singleQuote'), '/etc/create_db.sh ', parameters('AdminPasswordForBothVMs'), ' ', parameters('OracleDBUsername'), ' ', parameters('OracleDBPassword'), variables('singleQuote'))]"
+                            "commandToExecute": "[concat('cp create_db.sh /etc/create_db.sh && chmod 755 /etc/create_db.sh && su -l oracle -c ', variables('singleQuote'), '/etc/create_db.sh ', parameters('Password'), ' ', parameters('Username'), ' ', parameters('Password'), variables('singleQuote'))]"
                         }
                     }
                 }
@@ -251,8 +238,8 @@
             "properties": {
                 "osProfile": {
                     "computerName": "[variables('hdpVirtualMachineName')]",
-                    "adminUsername": "[parameters('HortonworksSandboxAdminUsername')]",
-                    "adminPassword": "[parameters('AdminPasswordForBothVMs')]"
+                    "adminUsername": "[parameters('Username')]",
+                    "adminPassword": "[parameters('Password')]"
                 },
                 "hardwareProfile": {
                     "vmSize": "[variables('virtualMachineSize')]"
