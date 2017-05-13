@@ -103,7 +103,7 @@
                             ]              
                         },
                         "protectedSettings": {
-                            "commandToExecute": "[concat('cp create_db.sh /etc/create_db.sh && chmod 755 /etc/create_db.sh && su -l oracle -c ', variables('singleQuote'), '/etc/create_db.sh ', parameters('Password'), ' ', parameters('Username'), ' ', parameters('Password'), variables('singleQuote'))]"
+                            "commandToExecute": "[concat('cp create_db.sh /etc/create_db.sh && chmod 755 /etc/create_db.sh && su -l oracle -c ', variables('singleQuote'), '/etc/create_db.sh ', parameters('Password'), ' ', parameters('Username'), variables('singleQuote'))]"
                         }
                     }
                 }
